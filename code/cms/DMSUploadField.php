@@ -74,7 +74,7 @@ class DMSUploadField extends UploadField
 
     /**
      * Action to handle upload of a single file
-     * 
+     *
      * @param SS_HTTPRequest $request
      * @return string json
      */
@@ -93,7 +93,7 @@ class DMSUploadField extends UploadField
         $name = $this->getName();
         $tmpfile = $request->postVar($name);
         $record = $this->getRecord();
-        
+
         // Check if the file has been uploaded into the temporary storage.
         if (!$tmpfile) {
             $return = array('error' => _t('UploadField.FIELDNOTSET', 'File information not found'));
@@ -141,7 +141,7 @@ class DMSUploadField extends UploadField
                 // Search for relations that can hold the uploaded files.
                 if ($relationClass = $this->getRelationAutosetClass()) {
                     // Create new object explicitly. Otherwise rely on Upload::load to choose the class.
-                    $fileObject = Object::create($relationClass);
+                    $fileObject = SS_Object::create($relationClass);
                 }
             }
 
@@ -161,7 +161,7 @@ class DMSUploadField extends UploadField
 
                     // CUSTOM Attach the file to the related record.
                     $document = $this->attachFile($file);
-                    
+
                     // Collect all output data.
                     $return = array_merge($return, array(
                         'id' => $document->ID,
@@ -199,7 +199,7 @@ class DMSUploadField extends UploadField
         // Replace the download template with a new one only when access the upload field through a GridField.
         // Needs to be enabled through setConfig('downloadTemplateName', 'ss-dmsuploadfield-downloadtemplate');
         Requirements::javascript('dms/javascript/DMSUploadField_downloadtemplate.js');
-            
+
         // In the add dialog, add the addtemplate into the set of file that load.
         Requirements::javascript('dms/javascript/DMSUploadField_addtemplate.js');
 
@@ -214,7 +214,7 @@ class DMSUploadField extends UploadField
     {
         return DMSUploadField_ItemHandler::create($this, $itemID);
     }
-    
+
 
     /**
      * FieldList $fields for the EditForm
@@ -223,7 +223,7 @@ class DMSUploadField extends UploadField
      * @param File $file File context to generate fields for
      * @return FieldList List of form fields
      */
-    public function getDMSFileEditFields($file) 
+    public function getDMSFileEditFields($file)
 	{
 
         // Empty actions, generate default
@@ -254,7 +254,7 @@ class DMSUploadField extends UploadField
      * @param File $file File context to generate form actions for
      * @return FieldList Field list containing FormAction
      */
-    public function getDMSFileEditActions($file) 
+    public function getDMSFileEditActions($file)
 	{
 
         // Empty actions, generate default
@@ -282,7 +282,7 @@ class DMSUploadField extends UploadField
      * @param File $file File context to generate validator from
      * @return Validator Validator object
      */
-    public function getDMSFileEditValidator($file) 
+    public function getDMSFileEditValidator($file)
 	{
         // Empty validator
         if(empty($this->fileEditValidator)) return null;
@@ -296,23 +296,23 @@ class DMSUploadField extends UploadField
         }
 
         user_error("Invalid value for UploadField::fileEditValidator", E_USER_ERROR);
-    }    
+    }
 }
 
 class DMSUploadField_ItemHandler extends UploadField_ItemHandler
 {
-	
+
     private static $allowed_actions = array(
         'delete',
         'edit',
         'EditForm',
     );
-	
+
     public function getItem()
     {
         return DataObject::get_by_id('DMSDocument', $this->itemID);
     }
-	
+
     /**
      * @return Form
      */
@@ -335,5 +335,5 @@ class DMSUploadField_ItemHandler extends UploadField_ItemHandler
 
     	return $form;
     }
-    
+
 }
